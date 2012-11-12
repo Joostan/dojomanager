@@ -1,0 +1,53 @@
+class Employee(db.Model):
+  name = db.StringProperty(required=True)
+  role = db.StringProperty(required=True,
+                           choices=set(["executive", "manager", "producer"]))
+  hire_date = db.DateProperty()
+  new_hire_training_completed = db.BooleanProperty(indexed=False)
+  email = db.StringProperty()
+
+"""
+e = Employee(name="John",
+             role="manager",
+             email=users.get_current_user().email())
+e.hire_date = datetime.datetime.now().date()
+e.put()
+"""
+
+
+	
+a = Ship(
+	name="Carrier",
+    size="XXXXX")
+a.put()	
+b = Ship(
+	name="Battleship",
+    size="XXXX")
+b.put()
+s = Ship(
+	name="Sub",
+    size="XXX")
+s.put()
+c = Ship(
+	name="Cruiser",
+    size="XXX")
+c.put()
+d = Ship(
+	name="Destroyer",
+    size="XX")
+d.put()
+
+
+
+
+
+try:
+			a = schema.Ship(
+				name=cgi.escape(self.request.get('shipname')),
+				size=cgi.escape(self.request.get('shipsize')))
+			logging.info('variable filled')
+			a.put()
+			logging.info('put')
+			#self.redirect("/ship")
+		except:
+			logging.info('hola')	

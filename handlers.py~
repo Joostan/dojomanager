@@ -1,0 +1,138 @@
+import webapp2
+import cgi
+import logging
+from google.appengine.ext import db
+import schema
+
+import jinja2
+import os
+
+jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+
+
+class MainPage(webapp2.RequestHandler):
+    def get(self):
+		self.response.out.write("""
+			<html>
+			<body>
+			<form action="/sign" method="post">
+			<div><textarea name="content" rows="3" cols="60" >"""+self.request.get('getval')+"""</textarea></div>
+			<div><input name="iamawesome" value="WHOOO"></div>
+			<div><input type="submit" value="Sign Guestbook"></div>
+			</form>""")
+		self.response.out.write('<br/>'+self.request.get('getval'))
+		uri = webapp2.uri_for('student', _full=True)
+		self.response.out.write('<br/><a href="'+uri+'">A link to the students page</a>')
+		self.response.out.write('</body> </html>')
+         
+
+class Guestbook(webapp2.RequestHandler):
+    def post(self):
+		self.response.out.write('<html><body>You wrote:<pre>')
+		self.response.out.write(cgi.escape(self.request.get('content')))
+		self.response.out.write(cgi.escape(self.request.get('iamawesome')))
+		self.response.out.write('</pre>')
+		uri = webapp2.uri_for('main', _full=True, getval=self.request.get('content'))
+		self.response.out.write('<a href ="')
+		self.response.out.write(uri)
+		self.response.out.write('">URI_FOR</a>')
+		foo = self.app.config.get('Contact_Name')
+		self.response.write('<br/>Main contact is %s' % foo)
+		self.response.out.write('</body></html>')
+		logging.debug("value of my var is %s", str(uri))	
+
+class StudentCreate(webapp2.RequestHandler):
+	def post(self):
+		logging.info('entry point')
+		logging.info(self.request.get('studentfirstname'))
+		if self.request.get('updateKey'):
+			existing = schema.Student.get(cgi.escape(self.request.get('updateKey')))
+			if existing.is_saved():
+				existing.firstname=cgi.escape(self.request.get('studentfirstname'))
+				existing.lastname=cgi.escape(self.request.get('studentlastname'))
+				existing.phone=cgi.escape(self.request.get('studentphone'))
+				existing.email=cgi.escape(self.request.get('studentemail'))
+				existing.address=cgi.escape(self.request.get('studentaddress'))
+				logging.info('variable filled')
+				existing.put()
+				self.redirect("/student")
+		else:
+			try:
+				a = schema.Student(
+					firstname=cgi.escape(self.request.get('studentfirstname')),
+					lastname=cgi.escape(self.request.get('studentlastname')),
+					phone=cgi.escape(self.request.get('studentphone')),
+					email=cgi.escape(self.request.get('studentemail')),
+					address=cgi.escape(self.request.get('studentaddress')))
+				logging.info('variable filled')
+				a.put()
+				logging.info('put')
+				self.redirect("/student")
+			except:
+				logging.info('hola')	
+		self.response.out.write('<html><body>Student Create:<pre>')
+		self.response.out.write('<p class="error">There seemed to be an error with that post! care to try again?</p>')
+		self.response.out.write(cgi.escape(self.request.get('studentfirstname')))
+		self.response.out.write(cgi.escape(self.request.get('studentlastname')))
+		self.response.out.write(cgi.escape(self.request.get('studentphone')))
+		self.response.out.write(cgi.escape(self.request.get('studentemail')))
+		self.response.out.write(cgi.escape(self.request.get('studentaddress')))
+		self.response.out.write(cgi.escape(self.request.get('updateKey')))
+		self.response.out.write('</pre>')
+		uri = webapp2.uri_for('student', _full=True, getval=self.request.get('content'))
+		self.response.out.write('<a href ="')
+		self.response.out.write(uri)
+		self.response.out.write('">Student Listings</a>')
+		foo = self.app.config.get('Contact_Name')
+		self.response.write('<br/>Main contact is %s' % foo)
+		self.response.out.write('</body></html>')
+		logging.debug("value of my var is %s", str(uri))	
+	
+		
+class pooStudentPage(webapp2.RequestHandler):
+	def get(self):
+		logging.info('this is a message from the studentPage handler')
+		self.response.out.write('<html><body>')
+		self.response.out.write('<h1>Dojo Manager</h1>')
+		self.response.out.write('<h3>(list of students:)</h3>')
+		self.response.out.write('<form action="/newstudent" method="post">')
+		self.response.out.write('<ul>')
+		studentQ = schema.Student.all()
+		for s in studentQ:
+			self.response.out.write("<li>firstname:<strong>%s</strong>" % s.firstname)
+			self.response.out.write("&nbsp;lastname:<strong>%s</strong>" % s.lastname)
+			self.response.out.write("&nbsp;phone:<strong>%s</strong>" % s.phone)
+			self.response.out.write("&nbsp;email:<strong>%s</strong>" % s.email)
+			self.response.out.write("&nbsp;address:<strong>%s</strong>" % s.address)
+			self.response.out.write("&nbsp;key: <sub>")
+			self.response.out.write(s.key())
+			self.response.out.write("</sub>")
+			self.response.out.write('<input type="radio" value="%s" name="updateKey">' % s.key())
+			self.response.out.write("</li>")
+		self.response.out.write('</ul>')
+		logging.info('result')
+		
+		self.response.out.write("""
+			<div><label>Student First Name</label><input type="text" name="studentfirstname" value="Bill"></div>
+			<div><label>Student Last Name</label><input type="text" name="studentlastname" value="Bloggs"></div>
+			<div><label>Student Phone</label><input type="text" name="studentphone" value="0427 123 456"></div>
+			<div><label>Student Email</label><input type="text" name="studentemail" value="bill@bloggs.com"></div>
+			<div><label>Student Address</label><input type="text" name="studentaddress" value="10 Antidiluvian St, Newtown"></div>
+			<div><input type="submit" value="Update Student"></div>
+			</form>""")
+		
+		uri = webapp2.uri_for('main', _full=True)
+		self.response.out.write('<a href ="')
+		self.response.out.write(uri)
+		self.response.out.write('">Main page</a>')
+		self.response.out.write('</body> </html>')
+		
+class StudentPage(webapp2.RequestHandler):
+    def get(self):
+		
+		template_values = {
+			'studentQ': schema.Student.all(),
+			'headings': ['First Name', 'Last Name', 'Phone', 'Email', 'Address', 'Edit']
+			}
+		template = jinja_environment.get_template('templates/students.html')
+		self.response.out.write(template.render(template_values))

@@ -1,0 +1,16 @@
+import cgi
+
+from google.appengine.api import users
+import webapp2
+import handlers
+import schema
+
+config = {'Contact_Name': 'Tony Carden'}
+
+applic = webapp2.WSGIApplication([
+    webapp2.Route('/', handler=handlers.MainPage,name='main'),
+	 webapp2.Route('/ship', handler=handlers.ShipPage,name='ship'),
+	 #webapp2.Route('/ship', handler=handlers.ShipPage,name='ship'),
+     webapp2.Route('/newship',handler=handlers.ShipCreate,name='newship')
+], debug=True, config=config)
+

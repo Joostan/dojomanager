@@ -1,0 +1,36 @@
+{% extends "templates/base.html" %}
+{%block title %}Students |{% endblock %}
+{% block content %}
+<div class="content">
+<form action="/newstudent" method="post">
+<table>
+<tr>
+	{% for heading in headings %}
+		<th>{{ heading|e }}</th>
+	{% endfor %}
+</tr>
+	{% for s in studentQ %}
+		<tr class="{{ loop.cycle('d0', 'd1') }}">
+			<td>{{ s.firstname|e }}</td>
+			<td>{{ s.lastname|e }}</td>
+			<td>{{ s.phone|e }}</td>
+			<td>{{ s.email|e }}</td>
+			<td>{{ s.address|e }}</td>
+			<td><input type="radio" value="{{ s.key()|e }}" name="updateKey"></td>
+		</tr>
+	{% endfor %}
+</table>
+
+<fieldset>
+<legend>Student Details</legend>
+<div><label>First Name&nbsp;</label><input type="text" name="studentfirstname" value="Bill"></div>
+<div><label>Last Name&nbsp;</label><input type="text" name="studentlastname" value="Bloggs"></div>
+<div><label>Phone&nbsp;</label><input type="text" name="studentphone" value="0427 123 456"></div>
+<div><label>Email&nbsp;</label><input type="text" name="studentemail" value="bill@bloggs.com"></div>
+<div><label>Address&nbsp;</label><textarea name="studentaddress" rows="2" cols="22">10 Antidiluvian St, Newtown</textarea></div>
+<div><input type="submit" value="Update Student"></div>
+</fieldset>
+</form>
+</div>
+{% endblock %}
+
