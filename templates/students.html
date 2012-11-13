@@ -17,18 +17,29 @@
 			<td>{{ s.phone|e }}</td>
 			<td><a href="mailto:{{ s.email|e }}">{{ s.email|e }}</a></td>
 			<td>{{ s.address|e }}</td>
+			<td>{{ s.monbid|e }}</td>
+			<td>{{ s.edgeid|e }}</td>
+			<td>{{ s.membexp|e }}</td>
+			<td>{{ s.tuitexp|e }}</td>
+			<td>{{ s.notes|e }}</td>
 			<td><input type="radio" value="{{ s.key()|e }}" name="updateKey"></td>
+			<td><input type="radio" value="{{ s.key()|e }}" name="delKey"></td>
 		</tr>
 	{% endfor %}
 </table>
 <br />
 <fieldset>
 <legend>Student Details</legend>
-<div><label>First Name&nbsp;</label><input type="text" name="studentfirstname" placeholder="Bill" required="required"></div>
-<div><label>Last Name&nbsp;</label><input type="text" name="studentlastname" placeholder="Bloggs"></div>
-<div><label>Phone&nbsp;</label><input type="text" name="studentphone" placeholder="0427 123 456"></div>
-<div><label>Email&nbsp;</label><input type="text" name="studentemail" placeholder="bill@bloggs.com"></div>
-<div><label>Address&nbsp;</label><textarea name="studentaddress" rows="2" cols="22" placeholder="10 Antidiluvian St, Newtown"></textarea></div>
+<div><label>First Name&nbsp;</label><input type="text" id="1" name="studentfirstname" placeholder="Bill" required="required"></div>
+<div><label>Last Name&nbsp;</label><input type="text" id="2" name="studentlastname" placeholder="Bloggs"></div>
+<div><label>Phone&nbsp;</label><input type="text" id="3" name="studentphone" placeholder="0427 123 456"></div>
+<div><label>Email&nbsp;</label><input type="text" id="4" name="studentemail" placeholder="bill@bloggs.com"></div>
+<div><label>Address&nbsp;</label><textarea id="5" name="studentaddress" rows="2" cols="22" placeholder="10 Antidiluvian St, Newtown"></textarea></div>
+<div><label>MonbID&nbsp;</label><input type="text" id="6" name="studentmonbid" placeholder="xx"></div>
+<div><label>EdgeID&nbsp;</label><input type="text" id="7" name="studentedgeid" placeholder="xxx"></div>
+<div><label>MembExp&nbsp;</label><input type="text" id="8" name="studentmembexp" placeholder="DD-MM-YY"></div>
+<div><label>TuitExp&nbsp;</label><input type="text" id="9" name="studenttuitexp" placeholder="DD-MM-YY"></div>
+<div><label>Notes&nbsp;</label><textarea id="10" name="studentnotes" rows="2" cols="22" placeholder="10 Antidiluvian St, Newtown"></textarea></div>
 <div><input type="submit" value="Update Student"></div>
 </fieldset>
 </form>
@@ -40,3 +51,25 @@
 </div>
 {% endblock %}
 </div>
+{% block pagejs %}
+<script type="text/javascript">
+$().ready(function() {
+	//console.info('hello from page load');	
+	var radios = $('[type="radio"]');
+	// console.info(radios);
+	radios.change(function(){
+		//console.info($(this));
+		var cells = $(this).parent().parent().children();
+		//console.info(cells);	
+		cells.each(function(index) {
+			//console.info(index);
+			//console.info((index+1).toString());
+			var inputid = '#'+(index+1).toString();
+			$(inputid).val($(this).text());
+			//console.info($(this).text());
+		});
+	});
+});
+</script>
+
+{% endblock %}

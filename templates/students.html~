@@ -1,7 +1,8 @@
 {% extends "templates/base.html" %}
 {%block title %}Students |{% endblock %}
+<div id="wrapper">
 {% block content %}
-<div class="content">
+<div id="content">
 <form action="/newstudent" method="post">
 <table>
 <tr>
@@ -14,23 +15,28 @@
 			<td>{{ s.firstname|e }}</td>
 			<td>{{ s.lastname|e }}</td>
 			<td>{{ s.phone|e }}</td>
-			<td>{{ s.email|e }}</td>
+			<td><a href="mailto:{{ s.email|e }}">{{ s.email|e }}</a></td>
 			<td>{{ s.address|e }}</td>
 			<td><input type="radio" value="{{ s.key()|e }}" name="updateKey"></td>
 		</tr>
 	{% endfor %}
 </table>
-
+<br />
 <fieldset>
 <legend>Student Details</legend>
-<div><label>First Name&nbsp;</label><input type="text" name="studentfirstname" value="Bill"></div>
-<div><label>Last Name&nbsp;</label><input type="text" name="studentlastname" value="Bloggs"></div>
-<div><label>Phone&nbsp;</label><input type="text" name="studentphone" value="0427 123 456"></div>
-<div><label>Email&nbsp;</label><input type="text" name="studentemail" value="bill@bloggs.com"></div>
-<div><label>Address&nbsp;</label><textarea name="studentaddress" rows="2" cols="22">10 Antidiluvian St, Newtown</textarea></div>
+<div><label>First Name&nbsp;</label><input type="text" name="studentfirstname" placeholder="Bill" required="required"></div>
+<div><label>Last Name&nbsp;</label><input type="text" name="studentlastname" placeholder="Bloggs"></div>
+<div><label>Phone&nbsp;</label><input type="text" name="studentphone" placeholder="0427 123 456"></div>
+<div><label>Email&nbsp;</label><input type="text" name="studentemail" placeholder="bill@bloggs.com"></div>
+<div><label>Address&nbsp;</label><textarea name="studentaddress" rows="2" cols="22" placeholder="10 Antidiluvian St, Newtown"></textarea></div>
 <div><input type="submit" value="Update Student"></div>
 </fieldset>
 </form>
 </div>
 {% endblock %}
-
+{% block footer %}
+<div id="footer">
+&copy; Copyright 2012 by TC
+</div>
+{% endblock %}
+</div>

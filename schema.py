@@ -10,3 +10,8 @@ class Student(db.Model):
 	phone = db.StringProperty()
 	email = db.StringProperty()
 	address = db.StringProperty()
+	monbid = db.StringProperty()
+	edgeid = db.StringProperty()
+	membexp = db.StringProperty()
+	tuitexp = db.StringProperty()
+	notes = db.StringProperty()

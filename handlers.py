@@ -26,33 +26,38 @@ class MainPage(webapp2.RequestHandler):
 		self.response.out.write('</body> </html>')
          
 
-class Guestbook(webapp2.RequestHandler):
-    def post(self):
-		self.response.out.write('<html><body>You wrote:<pre>')
-		self.response.out.write(cgi.escape(self.request.get('content')))
-		self.response.out.write(cgi.escape(self.request.get('iamawesome')))
-		self.response.out.write('</pre>')
-		uri = webapp2.uri_for('main', _full=True, getval=self.request.get('content'))
-		self.response.out.write('<a href ="')
-		self.response.out.write(uri)
-		self.response.out.write('">URI_FOR</a>')
-		foo = self.app.config.get('Contact_Name')
-		self.response.write('<br/>Main contact is %s' % foo)
-		self.response.out.write('</body></html>')
-		logging.debug("value of my var is %s", str(uri))	
-
 class StudentCreate(webapp2.RequestHandler):
 	def post(self):
 		logging.info('entry point')
 		logging.info(self.request.get('studentfirstname'))
-		if self.request.get('updateKey'):
+		if self.request.get('delKey'):
+			existing = schema.Student.get(cgi.escape(self.request.get('delKey')))
+			existing.delete()
+			self.redirect("/student")
+			
+		
+		elif self.request.get('updateKey'):
 			existing = schema.Student.get(cgi.escape(self.request.get('updateKey')))
 			if existing.is_saved():
 				existing.firstname=cgi.escape(self.request.get('studentfirstname'))
-				existing.lastname=cgi.escape(self.request.get('studentlastname'))
-				existing.phone=cgi.escape(self.request.get('studentphone'))
-				existing.email=cgi.escape(self.request.get('studentemail'))
-				existing.address=cgi.escape(self.request.get('studentaddress'))
+				if self.request.get('studentlastname'):
+				  existing.lastname=cgi.escape(self.request.get('studentlastname'))
+				if self.request.get('studentphone'):
+				  existing.phone=cgi.escape(self.request.get('studentphone'))
+				if self.request.get('studentemail'):				
+				  existing.email=cgi.escape(self.request.get('studentemail'))
+				if self.request.get('studentaddress'):
+				  existing.address=cgi.escape(self.request.get('studentaddress'))
+				if self.request.get('studentmonbid'):
+				  existing.monbid=cgi.escape(self.request.get('studentmonbid'))
+				if self.request.get('studentedgeid'):
+				  existing.edgeid=cgi.escape(self.request.get('studentedgeid'))
+				if self.request.get('studentmembexp'):
+				  existing.membexp=cgi.escape(self.request.get('studentmembexp'))
+				if self.request.get('studenttuitexp'):
+				  existing.tuitexp=cgi.escape(self.request.get('studenttuitexp'))
+				if self.request.get('studentnotes'):
+				  existing.notes=cgi.escape(self.request.get('studentnotes'))
 				logging.info('variable filled')
 				existing.put()
 				self.redirect("/student")
@@ -63,7 +68,12 @@ class StudentCreate(webapp2.RequestHandler):
 					lastname=cgi.escape(self.request.get('studentlastname')),
 					phone=cgi.escape(self.request.get('studentphone')),
 					email=cgi.escape(self.request.get('studentemail')),
-					address=cgi.escape(self.request.get('studentaddress')))
+					address=cgi.escape(self.request.get('studentaddress')),
+					monbid=cgi.escape(self.request.get('studentmonbid')),
+					edgeid=cgi.escape(self.request.get('studentedgeid')),
+					membexp=cgi.escape(self.request.get('studentmembexp')),
+					tuitexp=cgi.escape(self.request.get('studenttuitexp')),
+					notes=cgi.escape(self.request.get('studentnotes')))
 				logging.info('variable filled')
 				a.put()
 				logging.info('put')
@@ -77,6 +87,11 @@ class StudentCreate(webapp2.RequestHandler):
 		self.response.out.write(cgi.escape(self.request.get('studentphone')))
 		self.response.out.write(cgi.escape(self.request.get('studentemail')))
 		self.response.out.write(cgi.escape(self.request.get('studentaddress')))
+		self.response.out.write(cgi.escape(self.request.get('studentmonbid')))
+		self.response.out.write(cgi.escape(self.request.get('studentedgeid')))
+		self.response.out.write(cgi.escape(self.request.get('studentmembexp')))
+		self.response.out.write(cgi.escape(self.request.get('studenttuitexp')))
+		self.response.out.write(cgi.escape(self.request.get('studentnotes')))
 		self.response.out.write(cgi.escape(self.request.get('updateKey')))
 		self.response.out.write('</pre>')
 		uri = webapp2.uri_for('student', _full=True, getval=self.request.get('content'))
@@ -87,14 +102,16 @@ class StudentCreate(webapp2.RequestHandler):
 		self.response.write('<br/>Main contact is %s' % foo)
 		self.response.out.write('</body></html>')
 		logging.debug("value of my var is %s", str(uri))	
-	
+
+
+		
 				
 class StudentPage(webapp2.RequestHandler):
     def get(self):
 		
 		template_values = {
 			'studentQ': schema.Student.all(),
-			'headings': ['First Name', 'Last Name', 'Phone', 'Email', 'Address', 'Edit']
+			'headings': ['First Name', 'Last Name', 'Phone', 'Email', 'Address', 'MonbID', 'EdgeID', 'MembExp', 'TuitExp', 'Notes', 'Edit', 'Del']
 			}
 		template = jinja_environment.get_template('templates/students.html')
 		self.response.out.write(template.render(template_values))

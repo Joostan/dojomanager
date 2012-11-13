@@ -88,45 +88,7 @@ class StudentCreate(webapp2.RequestHandler):
 		self.response.out.write('</body></html>')
 		logging.debug("value of my var is %s", str(uri))	
 	
-		
-class pooStudentPage(webapp2.RequestHandler):
-	def get(self):
-		logging.info('this is a message from the studentPage handler')
-		self.response.out.write('<html><body>')
-		self.response.out.write('<h1>Dojo Manager</h1>')
-		self.response.out.write('<h3>(list of students:)</h3>')
-		self.response.out.write('<form action="/newstudent" method="post">')
-		self.response.out.write('<ul>')
-		studentQ = schema.Student.all()
-		for s in studentQ:
-			self.response.out.write("<li>firstname:<strong>%s</strong>" % s.firstname)
-			self.response.out.write("&nbsp;lastname:<strong>%s</strong>" % s.lastname)
-			self.response.out.write("&nbsp;phone:<strong>%s</strong>" % s.phone)
-			self.response.out.write("&nbsp;email:<strong>%s</strong>" % s.email)
-			self.response.out.write("&nbsp;address:<strong>%s</strong>" % s.address)
-			self.response.out.write("&nbsp;key: <sub>")
-			self.response.out.write(s.key())
-			self.response.out.write("</sub>")
-			self.response.out.write('<input type="radio" value="%s" name="updateKey">' % s.key())
-			self.response.out.write("</li>")
-		self.response.out.write('</ul>')
-		logging.info('result')
-		
-		self.response.out.write("""
-			<div><label>Student First Name</label><input type="text" name="studentfirstname" value="Bill"></div>
-			<div><label>Student Last Name</label><input type="text" name="studentlastname" value="Bloggs"></div>
-			<div><label>Student Phone</label><input type="text" name="studentphone" value="0427 123 456"></div>
-			<div><label>Student Email</label><input type="text" name="studentemail" value="bill@bloggs.com"></div>
-			<div><label>Student Address</label><input type="text" name="studentaddress" value="10 Antidiluvian St, Newtown"></div>
-			<div><input type="submit" value="Update Student"></div>
-			</form>""")
-		
-		uri = webapp2.uri_for('main', _full=True)
-		self.response.out.write('<a href ="')
-		self.response.out.write(uri)
-		self.response.out.write('">Main page</a>')
-		self.response.out.write('</body> </html>')
-		
+				
 class StudentPage(webapp2.RequestHandler):
     def get(self):
 		

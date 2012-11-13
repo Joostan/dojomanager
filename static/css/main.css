@@ -98,8 +98,12 @@ body {
 	padding:0;
 	height:100%;
 }
+
+table {
+	font:80%/1 sans-serif;
+}
    
-   td, th {
+td, th {
 	padding: 2px;
 	border: 1px solid #eee;
 }
