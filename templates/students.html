@@ -4,7 +4,7 @@
 {% block content %}
 <div id="content">
 <form action="/newstudent" method="post">
-<table>
+<table class="resizable" style="min-width:800px; min-height:300px;">
 <tr>
 	{% for heading in headings %}
 		<th>{{ heading|e }}</th>
@@ -28,7 +28,8 @@
 	{% endfor %}
 </table>
 <br />
-<fieldset>
+<div>
+<fieldset id="draggable2" class="resizable" style="min-width:300px; min-height:300px;">
 <legend>Student Details</legend>
 <div><label>First Name&nbsp;</label><input type="text" id="1" name="studentfirstname" placeholder="Bill" required="required"></div>
 <div><label>Last Name&nbsp;</label><input type="text" id="2" name="studentlastname" placeholder="Bloggs"></div>
@@ -42,6 +43,7 @@
 <div><label>Notes&nbsp;</label><textarea id="10" name="studentnotes" rows="2" cols="22" placeholder="10 Antidiluvian St, Newtown"></textarea></div>
 <div><input type="submit" value="Update Student"></div>
 </fieldset>
+</div>
 </form>
 </div>
 {% endblock %}
@@ -71,5 +73,32 @@ $().ready(function() {
 	});
 });
 </script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+<style>
+    .resizable { width: 150px; height: 150px; padding: 0.5em; }
+    .resizable h3 { text-align: center; margin: 0; }
+    .ui-resizable-helper { border: 2px dotted #00F; }
+    </style>
+    <script>
+    $(function() {
+        $( ".resizable" ).resizable({
+            animate: true,
+			helper: "ui-resizable-helper"
+			
+        });
+    });
+    </script>
+	
+	<style>
+    #draggable, #draggable2, #draggable3 { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 0 10px 10px 0; }
+    </style>
+    <script>
+    $(function() {
+        $( "#draggable" ).draggable({ cursor: "move", cursorAt: { top: 56, left: 56 } });
+        $( "#draggable2" ).draggable({ cursor: "crosshair", cursorAt: { top: -5, left: -5 } });
+        $( "#draggable3" ).draggable({ cursorAt: { bottom: 0 } });
+    });
+    </script>
 
 {% endblock %}
