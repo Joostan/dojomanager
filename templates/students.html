@@ -89,7 +89,7 @@ $(document).ready(function() {
 		var confirm = $('[type="radio"]#confirmdel');
 		//console.info(confirm);
 		confirm.change(function() {
-			if ( confirm.checked) {
+			if (confirm.prop('checked')){
 				console.info('checked');
 				$('form').submit(function() {
 				//console.info($(this));
