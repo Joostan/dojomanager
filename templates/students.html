@@ -23,7 +23,7 @@
 			<td>{{ s.tuitexp|e }}</td>
 			<td>{{ s.notes|e }}</td>
 			<td><input type="radio" value="{{ s.key()|e }}" name="updateKey" id="update"></td>
-			<td><input type="radio" value="{{ s.key()|e }}" name="delKey" id="del"><input type="button" class="hideButton" value="undo" /></td>
+			<td style="min-width:60px;"><input type="radio" value="{{ s.key()|e }}" name="delKey" id="del"><input type="button" class="hideButton" value="undo" /></td>
 		</tr>
 	{% endfor %}
 </table>
@@ -65,15 +65,11 @@ $().ready(function() {
 	var radios = $('[type="radio"]#update, [type="radio"]#del');
 	// console.info(radios);
 	radios.change(function(){
-		//console.info($(this));
+		$('#updateForm').show();
 		var cells = $(this).parent().parent().children();
-		//console.info(cells);	
 		cells.each(function(index) {
-			//console.info(index);
-			//console.info((index+1).toString());
 			var inputid = '#'+(index+1).toString();
 			$(inputid).val($(this).text());
-			//console.info($(this).text());
 		});
 	});
 });
@@ -85,6 +81,8 @@ $(document).ready(function() {
 	$('#delStudent').hide();
 	var delradio = $('[type="radio"]#del');
 	delradio.change(function() {
+			$('.hideButton').hide();
+			$('#updateForm').show();
 			$(this).parent().children('.hideButton').show();
 			$('#delStudent').show();
 		});
