@@ -1,0 +1,24 @@
+var confirm = $('#confirmdel');
+
+confirm.change(function(){
+    console.info(confirm);
+    console.info('change of del');
+    confirm.after('<input type="button" id="rem" value="UNDO!!!">');
+    $('#rem').click(function(){
+        $('#confirmdel').prop('checked',false);
+            
+    }); 
+    if (confirm.prop('checked')){
+         alert('we have a check');   
+    }
+});
+
+
+
+----------------------
+
+<input type="radio" id="confirmdel" value="Confirm delete" >
+
+
+
+?

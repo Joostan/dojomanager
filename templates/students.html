@@ -41,7 +41,7 @@
 <div><label>MembExp&nbsp;</label><input type="text" id="8" name="studentmembexp" placeholder="DD-MM-YY"></div>
 <div><label>TuitExp&nbsp;</label><input type="text" id="9" name="studenttuitexp" placeholder="DD-MM-YY"></div>
 <div><label>Notes&nbsp;</label><textarea id="10" name="studentnotes" rows="2" cols="22" placeholder="10 Antidiluvian St, Newtown"></textarea></div>
-<div><input type="submit" value="Update Student"><input type="radio" id="confirmdel" value="Confirm delete" style="display:none;"></div>
+<div><input type="submit" value="Update Student"></div>
 </fieldset>
 </div>
 </form>
@@ -79,34 +79,11 @@ $().ready(function() {
 <!-- Script by TC to add confirm delete function when Delete radio button is checked -->
 <script type="text/javascript">
 $(document).ready(function() {
-	//console.info('the document is ready');
-	//alert($('[type="radio"]#del').length + ' elements!');
 	var delradio = $('[type="radio"]#del');
 	delradio.change(function() {
-	//if (delradio) {
-	if ($(this)) {
-		alert('You have selected the delete radio button');
-		var confirm = $('[type="radio"]#confirmdel');
-		//console.info(confirm);
-		confirm.change(function() {
-			if (confirm.prop('checked')){
-				console.info('checked');
-				$('form').submit(function() {
-				//console.info($(this));
-					return true;
-			});
+		if ($("#delStudent").length == 0){
+			$('[type="submit"]').after('<input type="submit" name="delStudent" id="delStudent" value="Delete Student Record">');
 			}
-			else {
-				console.info('not checked');
-				$('form').submit(function() {
-					alert('Please confirm delete.');
-					return false;			
-				});	
-			};
-			});
-		$('[type="radio"]#confirmdel').toggle();		
-
-	};
 		});
 });
 </script> 

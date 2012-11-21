@@ -31,9 +31,10 @@ class StudentCreate(webapp2.RequestHandler):
 		logging.info('entry point')
 		logging.info(self.request.get('studentfirstname'))
 		if self.request.get('delKey'):
-			existing = schema.Student.get(cgi.escape(self.request.get('delKey')))
-			existing.delete()
-			self.redirect("/student")
+		    if self.request.get('delStudent'):
+			    existing = schema.Student.get(cgi.escape(self.request.get('delKey')))
+			    existing.delete()
+			    self.redirect("/student")
 			
 		
 		elif self.request.get('updateKey'):
