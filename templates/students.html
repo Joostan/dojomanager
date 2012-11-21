@@ -23,13 +23,16 @@
 			<td>{{ s.tuitexp|e }}</td>
 			<td>{{ s.notes|e }}</td>
 			<td><input type="radio" value="{{ s.key()|e }}" name="updateKey" id="update"></td>
-			<td><input type="radio" value="{{ s.key()|e }}" name="delKey" id="del"></td>
+			<td><input type="radio" value="{{ s.key()|e }}" name="delKey" id="del"><input type="button" class="hideButton" value="undo" /></td>
 		</tr>
 	{% endfor %}
 </table>
+
+<input type="button" id="toggleForm" value="Show/Hide Form" style="font-size:11px;"/>
 <br />
+
 <div>
-<fieldset id="draggable2" class="resizable" style="min-width:300px; min-height:300px;">
+<fieldset id="updateForm" style="width:300px; height:300px;">
 <legend>Student Details</legend>
 <div><label>First Name&nbsp;</label><input type="text" id="1" name="studentfirstname" placeholder="Bill" required="required"></div>
 <div><label>Last Name&nbsp;</label><input type="text" id="2" name="studentlastname" placeholder="Bloggs"></div>
@@ -41,7 +44,7 @@
 <div><label>MembExp&nbsp;</label><input type="text" id="8" name="studentmembexp" placeholder="DD-MM-YY"></div>
 <div><label>TuitExp&nbsp;</label><input type="text" id="9" name="studenttuitexp" placeholder="DD-MM-YY"></div>
 <div><label>Notes&nbsp;</label><textarea id="10" name="studentnotes" rows="2" cols="22" placeholder="10 Antidiluvian St, Newtown"></textarea></div>
-<div><input type="submit" value="Update Student"></div>
+<div><input type="submit" value="Update Student"><input type="submit" name="delStudent" id="delStudent" value="Delete Student Record"></div>
 </fieldset>
 </div>
 </form>
@@ -79,14 +82,40 @@ $().ready(function() {
 <!-- Script by TC to add confirm delete function when Delete radio button is checked -->
 <script type="text/javascript">
 $(document).ready(function() {
+	$('#delStudent').hide();
 	var delradio = $('[type="radio"]#del');
 	delradio.change(function() {
-		if ($("#delStudent").length == 0){
-			$('[type="submit"]').after('<input type="submit" name="delStudent" id="delStudent" value="Delete Student Record">');
-			}
+			$(this).parent().children('.hideButton').show();
+			$('#delStudent').show();
 		});
 });
 </script> 
+
+<!-- Script by TC for undo button for #del -->
+<script type="text/javascript">
+$(document).ready(function() {
+	$('.hideButton').hide();
+	$('.hideButton').click(function(){
+        $('.hideButton').parent().children('#del').prop('checked',false);
+		$(this).parent().children('.hideButton').hide();
+		$('#delStudent').hide();		
+    }); 
+});
+</script>
+
+<!-- Script by TC to toggle form visibility -->
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#updateForm').hide();
+	$('#toggleForm').click(function() {
+		if ($('#updateForm').is(':visible')) {
+			$('#updateForm').hide();
+		} else {
+			$('#updateForm').show();
+		}
+	});
+});
+</script>
 
 <!-- JQuery UI resizable and draggable scripts  -->
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />

@@ -10,7 +10,7 @@ import os
 jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
 
-class MainPage(webapp2.RequestHandler):
+class origMainPage(webapp2.RequestHandler):
     def get(self):
 		self.response.out.write("""
 			<html>
@@ -24,6 +24,11 @@ class MainPage(webapp2.RequestHandler):
 		uri = webapp2.uri_for('student', _full=True)
 		self.response.out.write('<br/><a href="'+uri+'">A link to the students page</a>')
 		self.response.out.write('</body> </html>')
+		
+class MainPage(webapp2.RequestHandler):
+    def get(self):		
+		template = jinja_environment.get_template('templates/dojohome.html')
+		self.response.out.write(template.render())
          
 
 class StudentCreate(webapp2.RequestHandler):
