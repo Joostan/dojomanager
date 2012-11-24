@@ -2,6 +2,8 @@ import webapp2
 import cgi
 import logging
 from google.appengine.ext import db
+from google.appengine.api import users
+##from google.appengine.ext.webapp.util import run_wsgi_app
 import schema
 
 import jinja2
@@ -9,26 +11,47 @@ import os
 
 jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
 
+providers = {
+    'Google'   : 'https://www.google.com/accounts/o8/id',
+    'Yahoo'    : 'yahoo.com',
+    'MySpace'  : 'myspace.com',
+    'AOL'      : 'aol.com',
+    'MyOpenID' : 'myopenid.com'
+    # add more here
+}
 
-class origMainPage(webapp2.RequestHandler):
+
+
+
+class MainPage2(webapp2.RequestHandler):
     def get(self):
-		self.response.out.write("""
-			<html>
-			<body>
-			<form action="/sign" method="post">
-			<div><textarea name="content" rows="3" cols="60" >"""+self.request.get('getval')+"""</textarea></div>
-			<div><input name="iamawesome" value="WHOOO"></div>
-			<div><input type="submit" value="Sign Guestbook"></div>
-			</form>""")
-		self.response.out.write('<br/>'+self.request.get('getval'))
-		uri = webapp2.uri_for('student', _full=True)
-		self.response.out.write('<br/><a href="'+uri+'">A link to the students page</a>')
-		self.response.out.write('</body> </html>')
+        user = users.get_current_user()
 		
+        if user:
+            greeting = ("Welcome, %s! (<a href=\"%s\">sign out</a>)" %
+                        (user.nickname(), users.create_logout_url("/")))
+        else:
+            greeting = ("<a href=\"%s\">Sign in or register</a>." %
+                        users.create_login_url("/"))
+
+        self.response.out.write("<html><body>%s</body></html>" % greeting)
+		
+
 class MainPage(webapp2.RequestHandler):
-    def get(self):		
+    def get(self):
+		user = users.get_current_user()
+		
+		template_values = {
+			'nickname': user.nickname(),
+			'logoutURL': users.create_logout_url("/"),
+			'loginURL': users.create_login_url("/"),
+			'user': user
+			} 
+			
 		template = jinja_environment.get_template('templates/dojohome.html')
-		self.response.out.write(template.render())
+		
+		self.response.out.write(template.render(template_values))
+
          
 
 class StudentCreate(webapp2.RequestHandler):
@@ -121,3 +144,4 @@ class StudentPage(webapp2.RequestHandler):
 			}
 		template = jinja_environment.get_template('templates/students.html')
 		self.response.out.write(template.render(template_values))
+		

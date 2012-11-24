@@ -1,0 +1,33 @@
+{% extends "templates/base.html" %}
+{%block title %}Log in with OpenID{% endblock %}
+
+  <h1>Log in with OpenID</h1>
+  <form method="get" action="/_ah/login_required">
+    {% if continue %}
+      <input type="text" name="continue" value="{{continue|escape}}" />
+    {% endif %}
+    <input type="text" name="openid" />
+    <input type="submit" value="Log In" />
+  </form>
+<div id="wrapper">
+{% block content %}
+<div id="content">
+<h1>Log in with OpenID</h1>
+  <form method="get" action="/_ah/login_required">
+    {% if continue %}
+      <input type="text" name="continue" value="{{continue|escape}}" />
+    {% endif %}
+    <input type="text" name="openid" />
+    <input type="submit" value="Log In" />
+  </form>
+</div>
+{% endblock %}
+{% block footer %}
+<div id="footer">
+&copy; Copyright 2012 by TC
+</div>
+{% endblock %}
+</div>
+{% block pagejs %}
+
+{% endblock %}

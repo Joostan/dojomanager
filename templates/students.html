@@ -3,6 +3,7 @@
 <div id="wrapper">
 {% block content %}
 <div id="content">
+<a href="/">Home</a>
 <form action="/newstudent" method="post">
 <table class="resizable" style="min-width:800px; min-height:300px;">
 <tr>
@@ -28,7 +29,7 @@
 	{% endfor %}
 </table>
 
-<input type="button" id="toggleForm" value="Show/Hide Form" style="font-size:11px;"/>
+<input type="button" id="toggleForm" value="Show Form" style="font-size:11px;"/>
 <br />
 
 <div>
@@ -83,6 +84,7 @@ $(document).ready(function() {
 	delradio.change(function() {
 			$('.hideButton').hide();
 			$('#updateForm').show();
+			$('#toggleForm').val('Hide Form');
 			$(this).parent().children('.hideButton').show();
 			$('#delStudent').show();
 		});
@@ -108,8 +110,10 @@ $(document).ready(function() {
 	$('#toggleForm').click(function() {
 		if ($('#updateForm').is(':visible')) {
 			$('#updateForm').hide();
+			$(this).val('Show Form');
 		} else {
 			$('#updateForm').show();
+			$(this).val('Hide Form');
 		}
 	});
 });

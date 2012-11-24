@@ -1,4 +1,4 @@
-application: dojomanager
+application: mapromanager
 version: 1
 runtime: python27
 api_version: 1
@@ -52,6 +52,10 @@ handlers:
   
 - url: /.*
   script: dojo.applic
+  login: required
+  
+- url: /_ah/login_required
+  script: do_openid_login.app
   
   
 libraries:

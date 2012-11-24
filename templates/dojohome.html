@@ -3,6 +3,13 @@
 <div id="wrapper">
 {% block content %}
 <div id="content">
+
+{% if nickname %}
+<p>Welcome, {{ nickname | e }} <a href="{{ logoutURL | e }}">sign out</a></p>
+{% else %}
+<a href="{{ loginURL | e }}">Sign in or register</a>.
+{% endif %}
+
 <h1>Welcome to DojoManager</h1>
 <a href="/student">Student manager</a>
 </div>
